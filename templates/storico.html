@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storico {{ alunno.nome }} {{ alunno.cognome }} - ClassExit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #ecf0f1;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            padding-top: 2rem;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-section {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+        }
+
+        .breadcrumb-custom {
+            background: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-custom .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom .breadcrumb-item.active {
+            color: white;
+        }
+
+        .content-section {
+            padding: 2rem;
+        }
+
+        .student-info-card {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .student-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2rem;
+            top: 1.5rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            z-index: 1;
+        }
+
+        .timeline-marker.completed {
+            background: var(--success-color);
+        }
+
+        .timeline-marker.ongoing {
+            background: var(--warning-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .timeline-times {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-info {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .duration-info {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .ongoing-indicator {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .stats-row {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-custom {
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-custom {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
+
+        .alert-custom {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <!-- Header -->
+            <div class="header-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('index') }}">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('visualizza_classe', classe_id=classe.doc_id) }}">
+                                {{ classe.nome }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">Storico {{ alunno.nome }} {{ alunno.cognome }}</li>
+                    </ol>
+                </nav>
+                <h1>
+                    <i class="fas fa-history"></i> Storico Uscite
+                </h1>
+                <p class="mb-0">{{ alunno.nome }} {{ alunno.cognome }} - {{ classe.nome }}</p>
+            </div>
+
+            <div class="content-section">
+                <!-- Messaggi di sistema -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-custom" role="alert">
+                                <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' if category == 'success' else 'info-circle' }}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Info studente -->
+                <div class="student-info-card">
+                    <div class="student-avatar">
+                        {{ alunno.nome[0]|upper }}{{ alunno.cognome[0]|upper }}
+                    </div>
+                    <h3>{{ alunno.nome }} {{ alunno.cognome }}</h3>
+                    <p class="text-muted mb-0">Classe {{ classe.nome }}</p>
+                </div>
+
+                <!-- Statistiche -->
+                {% if uscite %}
+                    <div class="stats-row">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <div class="stat-number">{{ uscite|length }}</div>
+                                    <div class="stat-label">Uscite Totali</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <div class="stat-number">{{ (uscite|selectattr('ora_rientro')|list)|length }}</div>
+                                    <div class="stat-label">Completate</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <div class="stat-number">{{ (uscite|rejectattr('ora_rientro')|list)|length }}</div>
+                                    <div class="stat-label">In Corso</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <a href="{{ url_for('visualizza_classe', classe_id=classe.doc_id) }}" 
+                                       class="btn btn-primary-custom">
+                                        <i class="fas fa-arrow-left"></i> Torna alla Classe
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline delle uscite -->
+                    <div class="timeline">
+                        {% for uscita in uscite %}
+                            <div class="timeline-item">
+                                <div class="timeline-marker {{ 'completed' if uscita.ora_rientro else 'ongoing' }}">
+                                    <i class="fas fa-{{ 'check' if uscita.ora_rientro else 'clock' }}"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-header">
+                                        <div class="timeline-date">
+                                            <i class="fas fa-calendar"></i>
+                                            {{ uscita.ora_uscita.split(' ')[0] }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-times">
+                                        <div class="time-info">
+                                            <div class="time-label">Ora Uscita</div>
+                                            <div class="time-value">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                                {{ uscita.ora_uscita.split(' ')[1][:5] }}
+                                            </div>
+                                        </div>
+                                        <div class="time-info">
+                                            <div class="time-label">Ora Rientro</div>
+                                            <div class="time-value">
+                                                {% if uscita.ora_rientro %}
+                                                    <i class="fas fa-sign-in-alt"></i>
+                                                    {{ uscita.ora_rientro.split(' ')[1][:5] }}
+                                                {% else %}
+                                                    <i class="fas fa-hourglass-half"></i>
+                                                    In corso...
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if uscita.ora_rientro %}
+                                        {% set ora_uscita = uscita.ora_uscita.split(' ')[1] %}
+                                        {% set ora_rientro = uscita.ora_rientro.split(' ')[1] %}
+                                        {% set minuti_uscita = ora_uscita.split(':')[0]|int * 60 + ora_uscita.split(':')[1]|int %}
+                                        {% set minuti_rientro = ora_rientro.split(':')[0]|int * 60 + ora_rientro.split(':')[1]|int %}
+                                        {% set durata_minuti = minuti_rientro - minuti_uscita %}
+                                        {% if durata_minuti > 0 %}
+                                            <div class="duration-info">
+                                                <i class="fas fa-stopwatch"></i>
+                                                Durata: 
+                                                {% if durata_minuti >= 60 %}
+                                                    {{ durata_minuti // 60 }}h {{ durata_minuti % 60 }}min
+                                                {% else %}
+                                                    {{ durata_minuti }}min
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="ongoing-indicator">
+                                            <i class="fas fa-clock"></i>
+                                            Uscita in corso - Attendere il rientro
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <h4>Nessuna uscita registrata</h4>
+                        <p>{{ alunno.nome }} {{ alunno.cognome }} non ha ancora effettuato uscite dall'aula.</p>
+                        <a href="{{ url_for('visualizza_classe', classe_id=classe.doc_id) }}" 
+                           class="btn btn-primary-custom">
+                            <i class="fas fa-arrow-left"></i> Torna alla Classe
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

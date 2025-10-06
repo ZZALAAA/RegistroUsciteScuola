@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ classe.nome }} - ClassExit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #ecf0f1;
+            --in-class-color: #27ae60;
+            --out-class-color: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            padding-top: 2rem;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-section {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+        }
+
+        .breadcrumb-custom {
+            background: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-custom .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom .breadcrumb-item.active {
+            color: white;
+        }
+
+        .content-section {
+            padding: 2rem;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .student-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .student-avatar.in-class {
+            background: var(--in-class-color);
+        }
+
+        .student-avatar.out-class {
+            background: var(--out-class-color);
+        }
+
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .student-status {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-in {
+            background: var(--in-class-color);
+            color: white;
+        }
+
+        .status-out {
+            background: var(--out-class-color);
+            color: white;
+        }
+
+        .btn-custom {
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary-custom {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-success-custom {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success-custom:hover {
+            background: #229954;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-warning-custom {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning-custom:hover {
+            background: #e67e22;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-info-custom {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info-custom:hover {
+            background: #138496;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .form-control-custom {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .alert-custom {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-row {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            border-bottom: none;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
+
+        .activity-info {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .warning-notice {
+            background: #fff3cd;
+            border: 1px solid #f7dc6f;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <!-- Header -->
+            <div class="header-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('index') }}">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ classe.nome }}</li>
+                    </ol>
+                </nav>
+                <h1>
+                    <i class="fas fa-graduation-cap"></i> {{ classe.nome }}
+                </h1>
+                <p class="mb-0">Gestione studenti e monitoraggio uscite</p>
+            </div>
+
+            <div class="content-section">
+                <!-- Messaggi di sistema -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-custom" role="alert">
+                                <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' if category == 'success' else 'info-circle' }}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Avviso se qualcuno è fuori -->
+                {% if qualcuno_fuori %}
+                    <div class="warning-notice">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Attenzione:</strong> C'è già uno studente fuori dall'aula. Nessun altro può uscire fino al suo rientro.
+                    </div>
+                {% endif %}
+
+                <!-- Statistiche -->
+                <div class="stats-row">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ alunni|length }}</div>
+                                <div class="stat-label">Studenti Totali</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ (alunni|selectattr('fuori_aula', 'equalto', false)|list)|length }}</div>
+                                <div class="stat-label">In Aula</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ (alunni|selectattr('fuori_aula', 'equalto', true)|list)|length }}</div>
+                                <div class="stat-label">Fuori Aula</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <button type="button" class="btn btn-success-custom" data-bs-toggle="modal" data-bs-target="#modalNuovoAlunno">
+                                    <i class="fas fa-user-plus"></i> Nuovo Studente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista studenti -->
+                {% if alunni %}
+                    <div class="row">
+                        {% for alunno in alunni %}
+                            <div class="col-lg-6 mb-3">
+                                <div class="student-card">
+                                    <div class="student-header">
+                                        <div class="student-info">
+                                            <div class="student-avatar {{ 'in-class' if not alunno.fuori_aula else 'out-class' }}">
+                                                {{ alunno.nome[0]|upper }}{{ alunno.cognome[0]|upper }}
+                                            </div>
+                                            <div>
+                                                <p class="student-name">{{ alunno.nome }} {{ alunno.cognome }}</p>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="status-badge {{ 'status-in' if not alunno.fuori_aula else 'status-out' }}">
+                                                        <i class="fas fa-{{ 'check' if not alunno.fuori_aula else 'times' }}"></i>
+                                                        {{ 'In Aula' if not alunno.fuori_aula else 'Fuori Aula' }}
+                                                    </span>
+                                                </div>
+                                                {% if alunno.ultima_attivita %}
+                                                    <div class="activity-info">
+                                                        {% if alunno.fuori_aula %}
+                                                            Uscito alle {{ alunno.ultima_attivita.ora_uscita.split(' ')[1][:5] }}
+                                                        {% else %}
+                                                            {% if alunno.ultima_attivita.ora_rientro %}
+                                                                Rientrato alle {{ alunno.ultima_attivita.ora_rientro.split(' ')[1][:5] }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-2">
+                                            {% if not alunno.fuori_aula %}
+                                                <form action="{{ url_for('registra_uscita', alunno_id=alunno.id) }}" method="POST">
+                                                    <button type="submit" class="btn btn-warning-custom" 
+                                                            {{ 'disabled' if qualcuno_fuori else '' }}>
+                                                        <i class="fas fa-sign-out-alt"></i> Uscita
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <form action="{{ url_for('registra_rientro', alunno_id=alunno.id) }}" method="POST">
+                                                    <button type="submit" class="btn btn-success-custom">
+                                                        <i class="fas fa-sign-in-alt"></i> Rientro
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                            <a href="{{ url_for('storico_alunno', alunno_id=alunno.id) }}" 
+                                               class="btn btn-info-custom">
+                                                <i class="fas fa-history"></i> Storico
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h4>Nessuno studente presente</h4>
+                        <p>Aggiungi gli studenti di questa classe per iniziare a monitorare le loro uscite.</p>
+                        <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#modalNuovoAlunno">
+                            <i class="fas fa-user-plus"></i> Aggiungi Primo Studente
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per nuovo studente -->
+    <div class="modal fade" id="modalNuovoAlunno" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-plus"></i> Nuovo Studente
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ url_for('aggiungi_alunno', classe_id=classe.doc_id) }}" method="POST">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nome" class="form-label">Nome</label>
+                                <input type="text" class="form-control form-control-custom" id="nome" name="nome" 
+                                       placeholder="Nome dello studente" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cognome" class="form-label">Cognome</label>
+                                <input type="text" class="form-control form-control-custom" id="cognome" name="cognome" 
+                                       placeholder="Cognome dello studente" required>
+                            </div>
+                        </div>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle"></i>
+                            Lo studente verrà aggiunto alla classe {{ classe.nome }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-success-custom">
+                            <i class="fas fa-save"></i> Aggiungi Studente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-refresh della pagina ogni 30 secondi per aggiornare gli stati
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
